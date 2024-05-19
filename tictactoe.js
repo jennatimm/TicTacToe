@@ -1,4 +1,5 @@
 // Tic Tac Toe
+//Set up the tic tac toe board with 0 elements
 var GameBoard = function () {
     this.cells = [];
     this.mainboard = true;
@@ -20,28 +21,39 @@ var GameBoard = function () {
     this.playerOne = true;
 };
 
+// cell free is a method in the gameboard object that checks if the index spot 
+// which coordinates to a spot on board is empty -> indicated by a -1
 GameBoard.prototype.cellFree = function (cell) {
     if (this.X.indexOf(cell) < 0 && this.O.indexOf(cell) < 0) return true;
     else return false;
 };
 
+// if spot is avaible then player will plave its mark there
+// @param cell is an int to represent a spot on board 
 GameBoard.prototype.move = function (cell) {
+    // if spot isfree
     if (this.cellFree(cell)) {
+        //player one plays marks with an X, player2 marks with an O
         this.playerOne ? this.X.push(cell) : this.O.push(cell);
+        // c is current Cell we are looking at
         var c = this.cells[cell - 1];
+        // set class name and innerHTML for cell element
         if (this.mainboard) {
             c.className = this.playerOne ? "X" : "O";
             c.innerHTML = this.playerOne ? "X" : "O";
         }
+        // swap players
         this.playerOne = !this.playerOne;
     }
     return this.gameOver();
 };
 
+// returns 1 if x won 2 if o one and 3 if draw 
 GameBoard.prototype.gameOver = function () {
     var Xwin = false;
     var Owin = false;
     var draw = false;
+    //if have moved more then three times its possible to have won
     if (this.X.length > 2) {
         for (var i = 0; i < this.X.length - 2; i++) {
             for (var j = i + 1; j < this.X.length - 1; j++) {
@@ -67,6 +79,7 @@ GameBoard.prototype.gameOver = function () {
     return 0;
 };
 
+//blanking out the gameboard
 GameBoard.prototype.reset = function () {
     for (var i = 0; i < this.cells.length; i++) {
         var c = this.cells[i];
@@ -80,6 +93,7 @@ GameBoard.prototype.reset = function () {
     this.playerOne = true;
 };
 
+// makes a clone of the game board returns clone
 GameBoard.prototype.clone = function () {
     var gb = new GameBoard();
     for (var i = 0; i < this.X.length; i++) {
@@ -93,6 +107,8 @@ GameBoard.prototype.clone = function () {
     return gb;
 };
 
+// whichevr player whos turn it is, goes
+// Then check if game is over by calling game over methods
 GameBoard.prototype.playGame = function (pOne, pTwo, cb) {
     var that = this;
 
